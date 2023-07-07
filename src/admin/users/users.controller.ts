@@ -50,6 +50,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'User getting by id' })
   @ApiResponse({ status: 200, description: 'Successful getting of user' })
+  @ApiResponse({ status: 403, description: 'User is blocked' })
   @ApiResponse({ status: 404, description: 'User is undefined' })
   @ApiResponse({ status: 406, description: 'ID is not a number' })
   @Get(':id')
@@ -83,6 +84,20 @@ export class UsersController {
   remove(@Param('id') id: string) {
     try {
       return this.usersService.remove(+id);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  @ApiOperation({ summary: 'User blocking' })
+  @ApiResponse({ status: 200, description: 'User was blocked' })
+  @ApiResponse({ status: 403, description: 'User is blocked already' })
+  @ApiResponse({ status: 404, description: 'User is undefined' })
+  @ApiResponse({ status: 406, description: 'ID is not a number' })
+  @Patch('block/:id')
+  block(@Param('id') id: string) {
+    try {
+      return this.usersService.block(+id);
     } catch (err) {
       throw new BadRequestException(err);
     }
