@@ -7,6 +7,7 @@ import { AdminModule } from './admin/admin.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaService } from './prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,9 @@ import { JwtService } from '@nestjs/jwt';
     }),
     ScheduleModule.forRoot(),
     AdminModule,
+    UserModule,
+    // User,
+    // UserModule
   ],
   controllers: [],
   providers: [PrismaService, JwtService],

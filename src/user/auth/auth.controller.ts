@@ -6,39 +6,60 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 
-@ApiTags('Users')
-@Controller('auth')
+@ApiTags('Main')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
   create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+    try {
+      return this.authService.create(createAuthDto);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   @Get()
   findAll() {
-    return this.authService.findAll();
+    try {
+      return this.authService.findAll();
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+    try {
+      return this.authService.findOne(+id);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
+    try {
+      return this.authService.update(+id, updateAuthDto);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+    try {
+      return this.authService.remove(+id);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 }

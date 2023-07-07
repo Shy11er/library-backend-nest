@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 import { AdminModule } from './admin/admin.module';
 import { ValidationPipe } from '@nestjs/common';
+import { UserModule } from './user/user.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -31,6 +32,17 @@ async function bootstrap() {
     deepScanRoutes: true,
   });
   SwaggerModule.setup('docs/admin', app, admimDocument);
+
+  const userConfig = new DocumentBuilder()
+    .setTitle('User')
+    .setVersion('1.0.0')
+    .build();
+
+  const userDocument = SwaggerModule.createDocument(app, userConfig, {
+    include: [UserModule],
+    deepScanRoutes: true,
+  });
+  SwaggerModule.setup('docs/user', app, userDocument);
 
   app.setBaseViewsDir(join(__dirname, '../../templates/', 'views'));
   app.setViewEngine('hbs');

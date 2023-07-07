@@ -29,19 +29,47 @@ export class AuthService {
     };
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async findAll() {
+    const allUsers = await this.prisma.user.findMany();
+
+    return allUsers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async findOne(id: number) {
+    const findUser = await this.prisma.user.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!findUser) {
+      throw new HttpException('This user is undefined', HttpStatus.NOT_FOUND);
+    }
+
+    if (findUser.is_blocked) {
+      throw new HttpException('This user is blocked', HttpStatus.FORBIDDEN);
+    }
+
+    return findUser;
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  async update(id: number, updateAuthDto: UpdateAuthDto) {
+    return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async remove(id: number) {
+    const findUser = await this.prisma.user.findFirst({
+      where: { id },
+    });
+
+    if (!findUser) {
+      throw new HttpException('This user is undefined', HttpStatus.NOT_FOUND);
+    }
+
+    await this.prisma.user.delete({ where: { id } });
+
+    return {
+      message: 'Successful user deleting',
+    };
   }
 }
